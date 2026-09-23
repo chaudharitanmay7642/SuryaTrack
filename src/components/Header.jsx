@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import logoImg from '../assets/suryatrack_logo.jpg'
 
 export function Header({ 
   currentLang, 
@@ -38,24 +39,103 @@ export function Header({
     <header className="site-header">
       <div className="header-container">
         
-        {/* Brand Logo */}
-        <div className="brand-logo" onClick={() => onNavigate('home')} role="button" tabIndex={0}>
-          <div className="logo-icon-wrap">
-            <svg viewBox="0 0 40 40" className="sun-panel-svg" aria-hidden="true">
-              {/* Sun rays */}
-              <circle cx="20" cy="20" r="14" fill="#f59e0b" opacity="0.2" />
-              <circle cx="20" cy="20" r="10" fill="#f59e0b" />
-              {/* Solar Grid Overlay */}
-              <path d="M12 16 L28 16 M12 24 L28 24 M16 12 L16 28 M24 12 L24 28" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
-            </svg>
+        {/* Left Corner: Actions & Brand Logo */}
+        <div className="header-left-section">
+          
+          {/* Action Buttons (Notification, Language, Profile) in Left Corner */}
+          <div className="header-actions">
+            
+            {/* Notification Button & Popover */}
+            <div className="notif-wrapper" ref={notifRef}>
+              <button 
+                className="action-btn notif-btn" 
+                onClick={() => setNotifOpen(!notifOpen)}
+                aria-label="View notifications"
+                title="Notifications"
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span className="notif-badge"></span>
+              </button>
+
+              {notifOpen && (
+                <div className="notif-popover">
+                  <div className="popover-header">
+                    <h4>Notifications</h4>
+                    <span className="popover-badge">1 New</span>
+                  </div>
+                  <div className="popover-item unread">
+                    <div className="popover-dot"></div>
+                    <div className="popover-text">
+                      <strong>Maharashtra Rooftop Subsidy</strong>
+                      <p>New subsidy version V2.0 detected with revised net-metering norms.</p>
+                      <span className="popover-time">10 mins ago</span>
+                    </div>
+                  </div>
+                  <div className="popover-item">
+                    <div className="popover-text">
+                      <strong>PM-Surya Ghar Notice</strong>
+                      <p>Mandatory NPCI bank seeding required for pending subsidies.</p>
+                      <span className="popover-time">Yesterday</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Language Selector Dropdown */}
+            <div className="lang-wrapper" ref={langRef}>
+              <button 
+                className="lang-btn" 
+                onClick={() => setLangMenuOpen(!langMenuOpen)}
+                aria-expanded={langMenuOpen}
+                title="Change Language"
+              >
+                <span className="lang-flag">🌐</span>
+                <span className="lang-current">{currentLang}</span>
+                <svg className={`chevron ${langMenuOpen ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
+              </button>
+
+              {langMenuOpen && (
+                <div className="lang-dropdown">
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      className={`lang-option ${currentLang === lang.code ? 'selected' : ''}`}
+                      onClick={() => {
+                        setCurrentLang(lang.code)
+                        setLangMenuOpen(false)
+                      }}
+                    >
+                      <span className="lang-flag">{lang.flag}</span>
+                      <span className="lang-text">{lang.label}</span>
+                      {currentLang === lang.code && (
+                        <svg className="check-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* User Profile Avatar */}
+            <div className="profile-btn" title="User Profile">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+
           </div>
-          <div className="brand-text">
-            <span className="brand-title">SolarTrack</span>
-            <span className="brand-subtitle">{translations.tagline}</span>
+
+          {/* Brand Logo */}
+          <div className="brand-logo" onClick={() => onNavigate('home')} role="button" tabIndex={0}>
+            <img src={logoImg} alt="SuryaTrack Logo" className="brand-logo-img" />
+            <div className="brand-text">
+              <span className="brand-title">SuryaTrack</span>
+              <span className="brand-subtitle">{translations.tagline}</span>
+            </div>
           </div>
+
         </div>
 
-        {/* Center Nav Links */}
+        {/* Navigation Links */}
         <nav className="main-nav" aria-label="Main Navigation">
           <a href="#home" onClick={(e) => { e.preventDefault(); onNavigate('home'); }} className="nav-item active">
             <svg className="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
@@ -90,88 +170,6 @@ export function Header({
             <span>Help</span>
           </a>
         </nav>
-
-        {/* Right Nav Actions */}
-        <div className="header-actions">
-          
-          {/* Notification Button & Popover */}
-          <div className="notif-wrapper" ref={notifRef}>
-            <button 
-              className="action-btn notif-btn" 
-              onClick={() => setNotifOpen(!notifOpen)}
-              aria-label="View notifications"
-              title="Notifications"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
-              <span className="notif-badge"></span>
-            </button>
-
-            {notifOpen && (
-              <div className="notif-popover">
-                <div className="popover-header">
-                  <h4>Notifications</h4>
-                  <span className="popover-badge">1 New</span>
-                </div>
-                <div className="popover-item unread">
-                  <div className="popover-dot"></div>
-                  <div className="popover-text">
-                    <strong>Maharashtra Rooftop Subsidy</strong>
-                    <p>New subsidy version V2.0 detected with revised net-metering norms.</p>
-                    <span className="popover-time">10 mins ago</span>
-                  </div>
-                </div>
-                <div className="popover-item">
-                  <div className="popover-text">
-                    <strong>PM-Surya Ghar Notice</strong>
-                    <p>Mandatory NPCI bank seeding required for pending subsidies.</p>
-                    <span className="popover-time">Yesterday</span>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Language Selector Dropdown */}
-          <div className="lang-wrapper" ref={langRef}>
-            <button 
-              className="lang-btn" 
-              onClick={() => setLangMenuOpen(!langMenuOpen)}
-              aria-expanded={langMenuOpen}
-              title="Change Language"
-            >
-              <span className="lang-flag">🌐</span>
-              <span className="lang-current">{currentLang}</span>
-              <svg className={`chevron ${langMenuOpen ? 'open' : ''}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m6 9 6 6 6-6"/></svg>
-            </button>
-
-            {langMenuOpen && (
-              <div className="lang-dropdown">
-                {languages.map((lang) => (
-                  <button
-                    key={lang.code}
-                    className={`lang-option ${currentLang === lang.code ? 'selected' : ''}`}
-                    onClick={() => {
-                      setCurrentLang(lang.code)
-                      setLangMenuOpen(false)
-                    }}
-                  >
-                    <span className="lang-flag">{lang.flag}</span>
-                    <span className="lang-text">{lang.label}</span>
-                    {currentLang === lang.code && (
-                      <svg className="check-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* User Profile Avatar */}
-          <div className="profile-btn" title="User Profile">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-
-        </div>
 
       </div>
     </header>
