@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SolarTrack - Rooftop Solar Policy & Subsidy Tracker</title>
+  <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    
+    body {
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background-color: #f8faf9;
+      color: #0f172a;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .hero-card-gradient {
+      background: linear-gradient(135deg, #effbf4 0%, #f0fdf4 50%, #e6f7ef 100%);
+    }
+
+    .sun-glow {
+      box-shadow: 0 0 45px 12px rgba(245, 158, 11, 0.35);
+    }
+
+    .floating-ask-btn {
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .floating-ask-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(5, 46, 22, 0.4);
+    }
+
+    /* Modal Backdrop */
+    .modal-backdrop {
+      background: rgba(15, 23, 42, 0.55);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-100 selection:text-emerald-900">
+
+  <!-- ================= TOP GLOBAL HEADER ================= -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-100 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+        
+        <!-- Top Row on Mobile / Left & Nav on Desktop -->
+        <div class="flex items-center justify-between w-full md:w-auto">
+          <!-- Logo & Brand -->
+          <div class="flex items-center gap-3 cursor-pointer group" onclick="scrollToSection('hero')">
+            <div class="w-10 h-10 rounded-xl bg-amber-50 border border-amber-200/60 flex items-center justify-center p-2 shadow-xs group-hover:scale-105 transition-transform">
+              <svg viewBox="0 0 24 24" class="w-6 h-6 text-amber-500 fill-current" stroke="currentColor" stroke-width="1.2">
+                <circle cx="12" cy="12" r="5" fill="#f59e0b" />
+                <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke="#f59e0b" stroke-width="2.2" stroke-linecap="round"/>
+                <!-- Internal Solar Grid lines -->
+                <path d="M9 10h6M9 14h6M10 9v6M14 9v6" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div>
+              <div class="font-extrabold text-xl tracking-tight text-slate-900 flex items-center gap-1.5">
+                SolarTrack
+              </div>
+              <p class="text-[11px] font-medium text-slate-500 tracking-tight leading-none">
+                Know Your Solar Policy. Know Your Rights.
+              </p>
+            </div>
+          </div>
+
+          <!-- Mobile Toggle (if on phone) -->
+          <div class="flex items-center gap-2 md:hidden">
+            <button onclick="toggleLang()" class="p-1.5 text-xs font-semibold bg-slate-100 rounded-lg text-slate-700">
+              <span id="mobileLangLabel">EN</span>
+            </button>
+            <button onclick="openModal('aiModal')" class="p-2 bg-emerald-700 text-white rounded-lg">
+              🌱
+            </button>
+          </div>
+        </div>
+
+        <!-- Primary Center/Right Nav Area -->
+        <div class="flex flex-col lg:flex-row lg:items-center gap-2.5">
+          
+          <!-- Row 1: Main Tabs + Utility Icons -->
+          <div class="flex items-center justify-between lg:justify-end gap-1.5 sm:gap-2 flex-wrap text-xs sm:text-[13px] font-medium">
+            
+            <a href="#hero" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-100 text-sky-700 font-semibold transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span>Home</span>
+            </a>
+
+            <a href="#calculator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+              <span>Check My Subsidy</span>
+            </a>
+
+            <a href="#timeline" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span>Policy Timeline</span>
+            </a>
+
+            <a href="#schemes" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+              <span>Schemes</span>
+            </a>
+
+            <a href="#calculator" class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" x2="18"/></svg>
+              <span>Calculator</span>
+            </a>
+
+            <!-- Notification, Language, Avatar -->
+            <div class="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <!-- Bell Icon -->
+              <button onclick="toggleNotif()" class="relative p-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-full transition-colors" title="Notifications">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white animate-pulse"></span>
+              </button>
+
+              <!-- Language Pill Dropdown -->
+              <div class="relative">
+                <button onclick="toggleLangMenu()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-semibold shadow-2xs">
+                  <span class="text-sm">🌐</span>
+                  <span id="langLabel">English</span>
+                  <svg class="w-3 h-3 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div id="langDropdown" class="hidden absolute right-0 mt-1 w-32 bg-white rounded-xl shadow-lg border border-slate-100 py-1 z-50 text-xs">
+                  <button onclick="setLang('English')" class="w-full text-left px-3 py-1.5 hover:bg-sky-50 font-medium text-slate-700 flex items-center justify-between">
+                    <span>English</span>
+                    <span class="text-[10px] text-slate-400">EN</span>
+                  </button>
+                  <button onclick="setLang('हिंदी')" class="w-full text-left px-3 py-1.5 hover:bg-sky-50 font-medium text-slate-700 flex items-center justify-between">
+                    <span>हिंदी</span>
+                    <span class="text-[10px] text-slate-400">HI</span>
+                  </button>
+                  <button onclick="setLang('मराठी')" class="w-full text-left px-3 py-1.5 hover:bg-sky-50 font-medium text-slate-700 flex items-center justify-between">
+                    <span>मराठी</span>
+                    <span class="text-[10px] text-slate-400">MR</span>
+                  </button>
+                  <button onclick="setLang('ગુજરાતી')" class="w-full text-left px-3 py-1.5 hover:bg-sky-50 font-medium text-slate-700 flex items-center justify-between">
+                    <span>ગુજરાતી</span>
+                    <span class="text-[10px] text-slate-400">GU</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- User Profile Avatar -->
+              <button class="w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center hover:bg-slate-800 transition-colors shadow-2xs" title="User Profile">
+                <svg class="w-4 h-4 text-slate-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Row 2: Highlight Sub-nav (Claim Pending Subsidy, Documents, Help) -->
+          <div class="flex items-center gap-2 text-xs font-semibold">
+            <!-- Green Highlight Pill -->
+            <a href="#grievance" class="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-emerald-100/90 text-emerald-800 hover:bg-emerald-200 transition-colors shadow-2xs">
+              <span class="font-bold text-emerald-700">$</span>
+              <span>Claim Pending Subsidy</span>
+            </a>
+
+            <a href="#schemes" class="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"/><path d="M6 6h10M6 10h10"/></svg>
+              <span>Documents</span>
+            </a>
+
+            <button onclick="openModal('aiModal')" class="flex items-center gap-1 px-2.5 py-1 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors">
+              <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Help</span>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- Notification Dropdown Popover -->
+  <div id="notifPopover" class="hidden fixed top-16 right-6 md:right-32 w-80 bg-white rounded-2xl shadow-2xl border border-slate-200/80 p-4 z-50">
+    <div class="flex items-center justify-between pb-2 border-b border-slate-100">
+      <div class="font-bold text-sm text-slate-900">Notifications</div>
+      <span class="text-[11px] font-semibold bg-sky-100 text-sky-800 px-2 py-0.5 rounded-full">1 New</span>
+    </div>
+    <div class="mt-2.5 space-y-2">
+      <div class="p-2.5 bg-amber-50/70 rounded-xl border border-amber-200/60 cursor-pointer hover:bg-amber-100/60 transition-colors" onclick="openModal('comparisonModal')">
+        <div class="flex items-start gap-2">
+          <span class="text-amber-600 font-bold text-sm">📢</span>
+          <div>
+            <div class="text-xs font-bold text-slate-900">Maharashtra Subsidy Update</div>
+            <div class="text-[11px] text-slate-600 mt-0.5">PM-Surya Ghar revised guidelines are active with standardized DBT credits.</div>
+            <div class="text-[10px] text-slate-400 mt-1">18 Sep 2026 • Click to compare</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MAIN VIEWPORT CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    
+    <!-- ================= 1. HERO SECTION (DUAL CARDS) ================= -->
+    <section id="hero" class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+      
+      <!-- LEFT HERO CARD (65% on desktop) -->
+      <div class="lg:col-span-8 rounded-[28px] border border-emerald-200/70 p-6 sm:p-8 lg:p-10 hero-card-gradient relative overflow-hidden shadow-xs flex flex-col justify-between">
+        
+        <!-- Subtle background watermark / aura -->
+        <div class="absolute -top-16 -right-16 w-72 h-72 bg-emerald-200/40 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center z-10">
+          
+          <!-- Left Text Content -->
+          <div class="md:col-span-7 space-y-4">
+            
+            <!-- Green Badge -->
+            <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100/90 text-emerald-800 border border-emerald-200/80 text-xs font-semibold tracking-tight shadow-2xs">
+              <span class="text-emerald-600">🌱</span>
+              <span id="t-heroBadge">Solar Subsidy Policy Tracker</span>
+            </div>
+
+            <!-- Main Heading -->
+            <h1 id="t-heroTitle" class="text-3xl sm:text-4xl lg:text-[38px] font-extrabold text-[#0d3b30] tracking-tight leading-[1.18]">
+              Find out which solar subsidy rules apply to you.
+            </h1>
+
+            <!-- Subtitle -->
+            <p id="t-heroSub" class="text-sm sm:text-[15px] text-slate-600 leading-relaxed font-normal max-w-xl">
+              Enter your state and application date to get the latest subsidy details, policy version and more — all in one place.
+            </p>
+
+            <!-- 3 Action Buttons -->
+            <div class="pt-2 flex flex-col sm:flex-row flex-wrap gap-2.5">
+              <!-- Button 1: Check My Subsidy (Primary Cyan/Blue) -->
+              <button onclick="scrollToSection('calculator')" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold text-sm shadow-md shadow-sky-500/15 transition-all hover:translate-y-[-1px]">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                <span id="t-checkSubsidyBtn">Check My Subsidy</span>
+                <span>→</span>
+              </button>
+
+              <!-- Button 2: Check Rules by Date (White Pill) -->
+              <button onclick="openModal('comparisonModal')" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-sm shadow-2xs transition-colors">
+                <svg class="w-4 h-4 text-slate-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+                <span id="t-checkRulesBtn">Check Rules by Date</span>
+                <span class="text-slate-400">&gt;</span>
+              </button>
+
+              <!-- Button 3: View Latest Scheme (White Pill) -->
+              <button onclick="scrollToSection('schemes')" class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold text-sm shadow-2xs transition-colors">
+                <svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                <span id="t-viewLatestSchemeBtn">View Latest Scheme</span>
+                <span class="text-slate-400">&gt;</span>
+              </button>
+            </div>
+
+          </div>
+
+          <!-- Right Solar House Illustration & Slogan -->
+          <div class="md:col-span-5 flex flex-col items-center justify-center pt-4 md:pt-0 relative">
+            
+            <!-- Slogan Badge -->
+            <div class="text-xs font-bold text-[#047857] flex items-center gap-1.5 self-center md:self-end mr-2 mb-2">
+              <span id="t-cleanEnergyBanner">Clean Energy Brighter Future</span>
+              <span class="text-sm">🌱</span>
+            </div>
+
+            <!-- Flat SVG Artwork reproducing the exact house & sun in picture -->
+            <div class="relative w-full max-w-[280px]">
+              <svg viewBox="0 0 320 220" class="w-full h-auto drop-shadow-sm select-none">
+                <defs>
+                  <linearGradient id="solarGlass" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1e3a8a" />
+                    <stop offset="100%" stop-color="#2563eb" />
+                  </linearGradient>
+                  <linearGradient id="roofShade" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#9a3412" />
+                    <stop offset="100%" stop-color="#7c2d12" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Glowing Yellow/Orange Sun -->
+                <circle cx="265" cy="55" r="28" fill="#f59e0b" opacity="0.25" />
+                <circle cx="265" cy="55" r="18" fill="#f59e0b" />
+                <circle cx="265" cy="55" r="14" fill="#fbbf24" />
+
+                <!-- Soft Lawn Base -->
+                <path d="M10 185 Q70 170 140 182 T260 176 T315 182 L315 220 L10 220 Z" fill="#bbf7d0" opacity="0.6"/>
+
+                <!-- Main House Body -->
+                <rect x="75" y="112" width="170" height="92" rx="3" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.8" />
+
+                <!-- Front Door (Dark Charcoal) -->
+                <rect x="145" y="138" width="30" height="66" rx="2" fill="#1e293b" />
+                <circle cx="152" cy="172" r="2.2" fill="#ffffff" />
+
+                <!-- Left Window (Light Blue 4 panes) -->
+                <rect x="92" y="132" width="34" height="34" rx="2" fill="#e0f2fe" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="109" y1="132" x2="109" y2="166" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="92" y1="149" x2="126" y2="149" stroke="#94a3b8" stroke-width="1.5" />
+
+                <!-- Right Window (Light Blue 4 panes) -->
+                <rect x="194" y="132" width="34" height="34" rx="2" fill="#e0f2fe" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="211" y1="132" x2="211" y2="166" stroke="#94a3b8" stroke-width="1.5" />
+                <line x1="194" y1="149" x2="228" y2="149" stroke="#94a3b8" stroke-width="1.5" />
+
+                <!-- Brown Pitch Roof -->
+                <polygon points="60,112 160,52 260,112" fill="url(#roofShade)" />
+
+                <!-- Solar Panels on Left Roof Slope -->
+                <g transform="translate(100, 68) skewX(-20)">
+                  <rect x="0" y="0" width="82" height="40" rx="2" fill="url(#solarGlass)" stroke="#60a5fa" stroke-width="1.5" />
+                  <!-- Grid Lines -->
+                  <line x1="0" y1="13" x2="82" y2="13" stroke="#93c5fd" stroke-width="1" opacity="0.85" />
+                  <line x1="0" y1="27" x2="82" y2="27" stroke="#93c5fd" stroke-width="1" opacity="0.85" />
+                  <line x1="20" y1="0" x2="20" y2="40" stroke="#93c5fd" stroke-width="1" opacity="0.85" />
+                  <line x1="41" y1="0" x2="41" y2="40" stroke="#93c5fd" stroke-width="1" opacity="0.85" />
+                  <line x1="62" y1="0" x2="62" y2="40" stroke="#93c5fd" stroke-width="1" opacity="0.85" />
+                </g>
+
+                <!-- White Sparkles / Glare Marks -->
+                <path d="M122 76 L127 81 M127 76 L122 81" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" />
+                <path d="M158 84 L163 89 M163 84 L158 89" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round" />
+              </svg>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- RIGHT HERO CARD: LATEST POLICY UPDATES (35% on desktop) -->
+      <div id="timeline" class="lg:col-span-4 rounded-[28px] border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+        
+        <!-- Header row -->
+        <div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="text-xl">🔔</span>
+              <h2 id="t-latestUpdatesTitle" class="font-bold text-slate-900 text-lg">
+                Latest Policy Updates
+              </h2>
+            </div>
+            <button onclick="openModal('comparisonModal')" class="text-xs font-semibold text-[#0284c7] hover:underline">
+              View All
+            </button>
+          </div>
+
+          <!-- Update content -->
+          <div class="mt-6 space-y-3">
+            
+            <!-- Yellow NEW Badge -->
+            <div>
+              <span class="inline-block px-2.5 py-0.5 rounded bg-[#fef08a] text-[#854d0e] font-extrabold text-[11px] tracking-wide">
+                NEW
+              </span>
+            </div>
+
+            <!-- Headline -->
+            <h3 id="t-newUpdateTitle" class="font-bold text-slate-900 text-[17px] sm:text-[18px] leading-snug">
+              New rooftop-solar subsidy detected for Maharashtra.
+            </h3>
+
+            <!-- Meta details with bullets -->
+            <div class="pt-2 space-y-1.5 text-xs text-slate-500 font-medium">
+              <div class="flex items-center gap-2">
+                <span class="text-amber-500 text-sm leading-none">•</span>
+                <span id="t-publishedOn">Published on: 18 Sep 2026</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-amber-500 text-sm leading-none">•</span>
+                <span id="t-effectiveFrom">Effective from: 15 Apr 2026</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Big Blue Action Button at Bottom of Right Card -->
+        <div class="pt-6">
+          <button onclick="openModal('comparisonModal')" class="w-full py-3 px-4 rounded-xl bg-[#0284c7] hover:bg-[#0369a1] text-white font-semibold text-sm flex items-center justify-center gap-2 shadow-sm transition-all hover:translate-y-[-1px]">
+            <span id="t-viewWhatChanged">View What Changed</span>
+            <span>→</span>
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ================= 2. 5 FEATURE ACTION CARDS ================= -->
+    <section class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3.5">
+      
+      <!-- Card 1: Timeline -->
+      <div onclick="scrollToSection('timeline')" class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm">Policy Timeline</div>
+          <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2">View all policy versions and changes over time.</div>
+        </div>
+        <div class="mt-3 text-xs font-semibold text-emerald-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Explore &rarr;
+        </div>
+      </div>
+
+      <!-- Card 2: Compare Policies -->
+      <div onclick="openModal('comparisonModal')" class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-sky-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="8" height="14" x="3" y="5" rx="1"/><rect width="8" height="14" x="13" y="5" rx="1"/></svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm">Compare Policies</div>
+          <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2">See what changed between old and new rules.</div>
+        </div>
+        <div class="mt-3 text-xs font-semibold text-sky-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Compare &rarr;
+        </div>
+      </div>
+
+      <!-- Card 3: Subsidy Calculator -->
+      <div onclick="scrollToSection('calculator')" class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-amber-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div class="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" x2="18"/></svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm">Subsidy Calculator</div>
+          <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2">Get an estimated subsidy based on system size.</div>
+        </div>
+        <div class="mt-3 text-xs font-semibold text-amber-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Calculate &rarr;
+        </div>
+      </div>
+
+      <!-- Card 4: State Schemes -->
+      <div onclick="scrollToSection('schemes')" class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+        <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm">State-wise Schemes</div>
+          <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2">Find schemes and DISCOM details for your state.</div>
+        </div>
+        <div class="mt-3 text-xs font-semibold text-indigo-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Search State &rarr;
+        </div>
+      </div>
+
+      <!-- Card 5: AI Assistant -->
+      <div onclick="openModal('aiModal')" class="p-4 rounded-2xl bg-white border border-slate-200/80 hover:border-emerald-400 hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between col-span-2 sm:col-span-1">
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-700 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <span class="text-lg">🤖</span>
+        </div>
+        <div>
+          <div class="font-bold text-slate-900 text-sm">AI Assistant</div>
+          <div class="text-[11px] text-slate-500 mt-0.5 line-clamp-2">Ask anything about solar subsidy policies.</div>
+        </div>
+        <div class="mt-3 text-xs font-semibold text-emerald-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+          Chat Now &rarr;
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ================= 3. DASHBOARD TRIAD (CALCULATOR, STATE SEARCH, TIMELINE) ================= -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- QUICK SUBSIDY CALCULATOR (Col 7) -->
+      <div id="calculator" class="lg:col-span-7 bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-xs">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+          <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center">
+              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" x2="18"/></svg>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-900 text-base">Solar Subsidy & Savings Calculator</h3>
+              <p class="text-xs text-slate-500">Enter your property, electricity and appliance details</p>
+            </div>
+          </div>
+          <span class="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">2026 Policy V2</span>
+        </div>
+
+        <!-- 1. Property Details -->
+        <div class="mt-5">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 text-xs font-black flex items-center justify-center">1</span>
+            <h4 class="text-sm font-extrabold text-slate-900">Property Details</h4>
+          </div>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">State</label>
+          <select id="calcState" onchange="runCalc()" class="w-full mb-3 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option value="MH">Maharashtra</option>
+            <option value="GJ">Gujarat</option>
+            <option value="DL">Delhi</option>
+            <option value="KA">Karnataka</option>
+            <option value="UP">Uttar Pradesh</option>
+            <option value="TN">Tamil Nadu</option>
+          </select>
+          <label class="block text-xs font-bold text-slate-700 mb-1.5">Property Type</label>
+          <select id="propertyType" onchange="runCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-sky-500">
+            <option>1 BHK</option><option>2 BHK</option><option>3 BHK</option><option>4 BHK</option><option>Villa</option>
+            <option>Neighborhood Commercial</option><option>General Commercial</option><option>Heavy Commercial</option>
+            <option>Light Industrial</option><option>Medium Industrial</option><option>Intensive Industrial</option>
+          </select>
+        </div>
+
+        <!-- 2. Electricity Details -->
+        <div class="mt-5 pt-5 border-t border-slate-100">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 text-xs font-black flex items-center justify-center">2</span>
+            <h4 class="text-sm font-extrabold text-slate-900">Electricity Details</h4>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Monthly Electricity Bill (₹)</label>
+              <input id="monthlyBill" type="number" min="0" step="100" value="5000" oninput="runCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold" placeholder="e.g. 5000">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">OR Monthly Consumption (kWh)</label>
+              <input id="monthlyConsumption" type="number" min="0" step="1" value="500" oninput="runCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold" placeholder="e.g. 500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1.5">Electricity Tariff (₹/kWh)</label>
+              <input id="electricityTariff" type="number" min="0" step="0.1" value="10" oninput="runCalc()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold" placeholder="e.g. 10">
+            </div>
+          </div>
+          <p class="text-[10px] text-slate-400 mt-2">If both bill and consumption are entered, the calculator uses the consumption value and uses tariff × consumption as the current bill.</p>
+        </div>
+
+        <!-- 3. Appliance Load -->
+        <div class="mt-5 pt-5 border-t border-slate-100">
+          <div class="flex items-center justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-sky-100 text-sky-700 text-xs font-black flex items-center justify-center">3</span>
+              <div><h4 class="text-sm font-extrabold text-slate-900">Appliance Load</h4></div>
+            </div>
+            <button type="button" onclick="addApplianceRow()" class="px-3 py-1.5 rounded-lg bg-sky-50 text-sky-700 border border-sky-200 text-xs font-bold hover:bg-sky-100">+ Add Appliance</button>
+          </div>
+          <div class="grid grid-cols-12 gap-2 text-[10px] font-bold text-slate-500 px-1 mb-1">
+            <span class="col-span-4">Appliance name</span><span class="col-span-2">Wattage (W)</span><span class="col-span-2">Qty</span><span class="col-span-2">Hours/day</span><span class="col-span-2">Monthly kWh</span>
+          </div>
+          <div id="applianceRows" class="space-y-2"></div>
+          <div class="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-100 flex justify-between text-xs">
+            <span class="font-semibold text-slate-600">Total Monthly Appliance Consumption</span>
+            <strong id="applianceTotal" class="text-slate-900">0 kWh</strong>
+          </div>
+        </div>
+
+        <!-- 4. Solar Calculation -->
+        <div class="mt-5 pt-5 border-t border-slate-100">
+          <div class="flex items-center gap-2 mb-3"><span class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 text-xs font-black flex items-center justify-center">4</span><h4 class="text-sm font-extrabold text-slate-900">Solar Calculation</h4></div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="p-3 rounded-xl bg-amber-50 border border-amber-100"><span class="text-[10px] text-amber-700 font-bold block">Peak Sun Hours</span><strong id="resPSH" class="text-lg text-amber-800">5.0 hrs/day</strong></div>
+            <div class="p-3 rounded-xl bg-sky-50 border border-sky-100"><span class="text-[10px] text-sky-700 font-bold block">Daily Consumption</span><strong id="resDailyConsumption" class="text-lg text-sky-800">0 kWh</strong></div>
+            <div class="p-3 rounded-xl bg-emerald-50 border border-emerald-100"><span class="text-[10px] text-emerald-700 font-bold block">Required Solar Capacity</span><strong id="resRequiredCapacity" class="text-lg text-emerald-800">1 kW</strong></div>
+          </div>
+        </div>
+
+        <!-- 5-7. Solar Output, Savings & Roof -->
+        <div class="mt-5 pt-5 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-white border border-slate-200">
+            <h4 class="text-xs font-extrabold text-slate-900 mb-3">5. Solar Generation</h4>
+            <div class="space-y-2 text-xs"><div class="flex justify-between"><span class="text-slate-500">Daily Generation</span><strong id="resDailyGeneration">0 kWh</strong></div><div class="flex justify-between"><span class="text-slate-500">Monthly Generation</span><strong id="resMonthlyGeneration">0 kWh</strong></div><div class="flex justify-between"><span class="text-slate-500">Annual Generation</span><strong id="resAnnualGeneration">0 kWh</strong></div></div>
+          </div>
+          <div class="p-4 rounded-2xl bg-white border border-slate-200">
+            <h4 class="text-xs font-extrabold text-slate-900 mb-3">6. Electricity Bill Savings</h4>
+            <div class="space-y-2 text-xs"><div class="flex justify-between"><span class="text-slate-500">Solar Coverage</span><strong id="resSolarCoverage">0%</strong></div><div class="flex justify-between"><span class="text-slate-500">Monthly Savings</span><strong id="resMonthlySavings">₹0</strong></div><div class="flex justify-between"><span class="text-slate-500">Remaining Bill</span><strong id="resRemainingBill">₹0</strong></div></div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 sm:col-span-2">
+            <h4 class="text-xs font-extrabold text-slate-900 mb-3">7. Rooftop Area</h4>
+            <div class="flex justify-between text-xs"><span class="text-slate-500">Required Roof Area</span><strong id="resRoofArea">100 sq ft</strong></div>
+            
+          </div>
+        </div>
+
+        <!-- 8-13. Financial & Environmental Results -->
+        <div class="mt-5 pt-5 border-t border-slate-100">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+            <div class="bg-slate-50 rounded-2xl p-3.5 border border-slate-100"><span class="text-[11px] font-medium text-slate-500 block">8. System Cost</span><span id="resTotalCost" class="text-lg font-extrabold text-slate-800 block mt-1">₹55,000</span></div>
+            <div class="bg-emerald-50 rounded-2xl p-3.5 border border-emerald-100"><span class="text-[11px] font-bold text-emerald-800 block">Government Subsidy</span><span id="resSubsidy" class="text-xl font-black text-emerald-600 block mt-1">₹30,000</span><span id="resSubsidyBreakdown" class="text-[10px] text-emerald-700">Central: ₹30k + State: ₹0</span></div>
+            <div class="bg-sky-50 rounded-2xl p-3.5 border border-sky-100"><span class="text-[11px] font-bold text-sky-800 block">Net System Cost</span><span id="resNetCost" class="text-xl font-black text-sky-700 block mt-1">₹25,000</span><span class="text-[10px] text-sky-600">After estimated subsidy</span></div>
+            <div class="bg-violet-50 rounded-2xl p-3.5 border border-violet-100"><span class="text-[11px] font-bold text-violet-800 block">9. Annual Savings</span><span id="resAnnualSavings" class="text-xl font-black text-violet-700 block mt-1">₹0</span></div>
+            <div class="bg-amber-50 rounded-2xl p-3.5 border border-amber-100"><span class="text-[11px] font-bold text-amber-800 block">10. Payback Period</span><span id="resPayback" class="text-xl font-black text-amber-700 block mt-1">—</span></div>
+            <div class="bg-indigo-50 rounded-2xl p-3.5 border border-indigo-100"><span class="text-[11px] font-bold text-indigo-800 block">11. Lifetime Net Savings</span><span id="resLifetimeSavings" class="text-xl font-black text-indigo-700 block mt-1">₹0</span></div>
+            <div class="bg-fuchsia-50 rounded-2xl p-3.5 border border-fuchsia-100"><span class="text-[11px] font-bold text-fuchsia-800 block">12. ROI</span><span id="resROI" class="text-xl font-black text-fuchsia-700 block mt-1">0%</span></div>
+            <div class="bg-teal-50 rounded-2xl p-3.5 border border-teal-100"><span class="text-[11px] font-bold text-teal-800 block">13. CO₂ Reduction</span><span id="resCO2" class="text-xl font-black text-teal-700 block mt-1">0 t/year</span></div>
+          </div>
+        </div>
+
+        
+      </div>
+
+      <!-- SEARCH BY STATE WIDGET (Col 5) -->
+      <div id="schemes" class="lg:col-span-5 bg-white rounded-3xl border border-slate-200/90 p-6 sm:p-7 shadow-xs flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div class="flex items-center gap-2">
+              <span class="text-lg">🗺️</span>
+              <h3 class="font-bold text-slate-900 text-base">Search by State</h3>
+            </div>
+            <span class="text-xs text-slate-500 font-medium">All 28 States Covered</span>
+          </div>
+
+          <div class="mt-4">
+            <label class="block text-xs font-bold text-slate-700 mb-1.5">Select your state:</label>
+            <select id="stateSearchSelect" onchange="updateStateDetails()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none">
+              <option value="MH">Maharashtra</option>
+              <option value="GJ">Gujarat</option>
+              <option value="DL">Delhi</option>
+              <option value="KA">Karnataka</option>
+              <option value="UP">Uttar Pradesh</option>
+              <option value="TN">Tamil Nadu</option>
+            </select>
+          </div>
+
+          <!-- Dynamic State Info Box -->
+          <div id="stateInfoBox" class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Primary DISCOM:</span>
+              <span id="stDiscom" class="font-bold text-slate-800">MSEDCL, Adani, Tata Power</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Applicable Scheme:</span>
+              <span id="stScheme" class="font-bold text-emerald-700">PM-Surya Ghar + State Top-up</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Latest Policy Version:</span>
+              <span id="stVersion" class="font-bold text-sky-700 bg-sky-100 px-2 py-0.5 rounded">V2.4 (Sep 2026)</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-500 font-medium">Net-Metering Rule:</span>
+              <span id="stNetMeter" class="font-semibold text-slate-700">Smart Bi-directional Meter</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="openModal('comparisonModal')" class="mt-4 w-full py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 text-xs font-bold text-slate-700 flex items-center justify-center gap-1.5 transition-colors">
+          <span>View Full State Guidelines & Net-Metering SLAs</span>
+          <span>&gt;</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ================= 4. GRIEVANCE & UNCLAIMED SUBSIDY PORTAL ================= -->
+    <section id="grievance" class="bg-white rounded-3xl border border-emerald-200/80 p-6 sm:p-8 shadow-xs">
+      
+      <div class="max-w-3xl">
+        <span class="text-[11px] font-extrabold tracking-wider uppercase text-emerald-700 bg-emerald-100 px-2.5 py-0.5 rounded-md">
+          SUBSIDY RESOLUTION & GRIEVANCE PORTAL
+        </span>
+        <h2 class="text-2xl font-extrabold text-slate-900 mt-2">
+          Claim Unreceived / Delayed Solar Subsidy
+        </h2>
+        <p class="text-sm text-slate-600 mt-1">
+          Installed rooftop solar but haven't received your subsidy in your bank account? Diagnose the reason, submit an escalation claim, and track your disbursal.
+        </p>
+      </div>
+
+      <!-- Grievance Tabs -->
+      <div class="flex border-b border-slate-200 mt-6 gap-6 text-sm font-semibold">
+        <button id="tabBtn1" onclick="switchGrievanceTab('diagnose')" class="pb-3 border-b-2 border-emerald-600 text-emerald-700 flex items-center gap-2">
+          <span>1. Diagnose Rejection Reason</span>
+        </button>
+        <button id="tabBtn2" onclick="switchGrievanceTab('claim')" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2">
+          <span>2. Submit Escalation Claim</span>
+        </button>
+        <button id="tabBtn3" onclick="switchGrievanceTab('track')" class="pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2">
+          <span>3. Track Status</span>
+        </button>
+      </div>
+
+      <!-- Tab 1: Diagnose -->
+      <div id="grievanceTab1" class="pt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        
+        <div class="p-4 rounded-2xl bg-emerald-50/60 border border-emerald-200/70 hover:shadow-sm transition-all cursor-pointer" onclick="selectIssue('npci')">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+            <span>🏦</span>
+            <span>NPCI Aadhaar Not Mapped</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Responsible for 68% of DBT solar subsidy delays. Bank account is not mapped to Aadhaar payment bridge (APBS).
+          </p>
+          <div class="mt-3 text-xs font-bold text-emerald-700">View Fix & Resolution &rarr;</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-sky-50/60 border border-sky-200/70 hover:shadow-sm transition-all cursor-pointer" onclick="selectIssue('pcr')">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+            <span>📄</span>
+            <span>Vendor PCR Not Uploaded</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            Project Commissioning Report (PCR) must be signed and submitted on the National Portal by the registered vendor.
+          </p>
+          <div class="mt-3 text-xs font-bold text-sky-700">Vendor Reminder Notice &rarr;</div>
+        </div>
+
+        <div class="p-4 rounded-2xl bg-amber-50/60 border border-amber-200/70 hover:shadow-sm transition-all cursor-pointer" onclick="selectIssue('discom')">
+          <div class="font-bold text-slate-900 text-sm flex items-center gap-1.5">
+            <span>⚡</span>
+            <span>DISCOM Meter Inspection Pending</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2 leading-relaxed">
+            DISCOM SLA requires net-meter synchronization within 15 days of installation. Beyond this, escalation applies.
+          </p>
+          <div class="mt-3 text-xs font-bold text-amber-700">Lodge SLA Escalation &rarr;</div>
+        </div>
+
+      </div>
+
+      <!-- Tab 2: Claim Form -->
+      <div id="grievanceTab2" class="hidden pt-6 max-w-2xl">
+        <form onsubmit="submitClaim(event)" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Electricity Consumer Number *</label>
+              <input id="formConsumerNo" type="text" placeholder="e.g. 02854001923" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">National Portal Application ID</label>
+              <input id="formAppId" type="text" placeholder="e.g. PMSGY-928472" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Installation / Commission Date *</label>
+              <input id="formInstallDate" type="date" required class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Bank IFSC Code</label>
+              <input id="formIfsc" type="text" placeholder="e.g. SBIN0001234" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+          <button type="submit" class="w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-sm rounded-xl shadow-md transition-all">
+            Generate Grievance Ticket & Escalate to State Nodal Officer
+          </button>
+        </form>
+      </div>
+
+      <!-- Tab 3: Track -->
+      <div id="grievanceTab3" class="hidden pt-6 max-w-xl">
+        <div class="flex gap-2">
+          <input id="trackInput" type="text" placeholder="Enter Ticket No (e.g. ST-MNRE-49281) or Consumer No" class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500">
+          <button onclick="runTrack()" class="px-5 py-2 bg-slate-900 text-white text-sm font-semibold rounded-xl hover:bg-slate-800">
+            Track
+          </button>
+        </div>
+        <div id="trackResultBox" class="mt-4 p-4 rounded-2xl bg-slate-50 border border-slate-200 hidden">
+          <div class="flex items-center justify-between">
+            <span id="trTicket" class="font-bold text-xs text-slate-900">Ticket: ST-MNRE-783921</span>
+            <span class="text-[11px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-full">In Verification</span>
+          </div>
+          <p class="text-xs text-slate-600 mt-2">
+            Status: PCR verified by DISCOM. Awaiting NPCI batch disbursement token. Expected date: 28 Sep 2026.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ================= 5. FLOATING AI ASSISTANT TRIGGER BUTTON ================= -->
+  <div class="fixed bottom-6 right-6 z-40">
+    <button onclick="openModal('aiModal')" class="floating-ask-btn flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#064e3b] text-white shadow-xl hover:bg-[#022c22] border border-emerald-500/30">
+      <span class="text-base">🌱</span>
+      <span class="text-xs sm:text-sm font-bold tracking-tight">Ask SolarTrack</span>
+      <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+    </button>
+  </div>
+
+  <!-- ================= FOOTER ================= -->
+  <footer class="bg-white border-t border-slate-200/80 mt-16 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-md bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-600 font-bold text-xs">
+          ☀️
+        </div>
+        <span class="font-semibold text-slate-800">SolarTrack</span>
+        <span>• Supporting India's National Rooftop Solar Mission</span>
+      </div>
+      <div>
+        Policy Version 2.0 (2026) • Direct Benefit Transfer (DBT) Guidelines Compliant
+      </div>
+    </div>
+  </footer>
+
+  <!-- ================= MODAL: POLICY COMPARISON ================= -->
+  <div id="comparisonModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-2xl w-full p-6 sm:p-7 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+        <div>
+          <span class="text-[11px] font-bold text-sky-700 bg-sky-50 px-2 py-0.5 rounded">REGULATORY DIFF</span>
+          <h3 class="font-extrabold text-lg text-slate-900 mt-1">What Changed: Old Rules vs New Policy</h3>
+        </div>
+        <button onclick="closeModal('comparisonModal')" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 font-bold">
+          ✕
+        </button>
+      </div>
+
+      <div class="mt-4 space-y-4">
+        <!-- Diff item 1 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <div class="font-bold text-xs text-slate-900 mb-2">1. Central Subsidy Slabs (PM-Surya Ghar)</div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 bg-red-50 text-red-900 rounded-xl border border-red-100">
+              <span class="font-bold block text-[10px] uppercase text-red-700">Previous Policy (V1)</span>
+              <span>40% up to 3kW (~₹43,582). Complex benchmark costing with state caps.</span>
+            </div>
+            <div class="p-2.5 bg-emerald-50 text-emerald-900 rounded-xl border border-emerald-100">
+              <span class="font-bold block text-[10px] uppercase text-emerald-700">New Policy (V2.0 - Active)</span>
+              <span>Standard ₹30,000 for 1kW, ₹60,000 for 2kW, and ₹78,000 for 3kW+.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diff item 2 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <div class="font-bold text-xs text-slate-900 mb-2">2. Net-Metering & Inspection SLA</div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 bg-red-50 text-red-900 rounded-xl border border-red-100">
+              <span class="font-bold block text-[10px] uppercase text-red-700">Previous Policy (V1)</span>
+              <span>No penalty on DISCOM delays; inspections often exceeded 60 days.</span>
+            </div>
+            <div class="p-2.5 bg-emerald-50 text-emerald-900 rounded-xl border border-emerald-100">
+              <span class="font-bold block text-[10px] uppercase text-emerald-700">New Policy (V2.0 - Active)</span>
+              <span>Strict 15-day maximum SLA for DISCOM inspection + deemed approval clause.</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Diff item 3 -->
+        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
+          <div class="font-bold text-xs text-slate-900 mb-2">3. Disbursal Mechanism</div>
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <div class="p-2.5 bg-red-50 text-red-900 rounded-xl border border-red-100">
+              <span class="font-bold block text-[10px] uppercase text-red-700">Previous Policy (V1)</span>
+              <span>Channeled via DISCOM accounts with 90–120 days turnaround.</span>
+            </div>
+            <div class="p-2.5 bg-emerald-50 text-emerald-900 rounded-xl border border-emerald-100">
+              <span class="font-bold block text-[10px] uppercase text-emerald-700">New Policy (V2.0 - Active)</span>
+              <span>Direct Benefit Transfer (DBT) directly into beneficiary's NPCI Aadhaar bank account.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-6 flex justify-end">
+        <button onclick="closeModal('comparisonModal')" class="px-5 py-2.5 bg-[#0284c7] text-white text-xs font-bold rounded-xl hover:bg-sky-700">
+          Got It, Thanks
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= MODAL: AI ASSISTANT ================= -->
+  <div id="aiModal" class="hidden fixed inset-0 z-50 modal-backdrop flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl border border-slate-100 flex flex-col h-[520px]">
+      
+      <!-- AI Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2.5">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+            🌱
+          </div>
+          <div>
+            <h3 class="font-bold text-slate-900 text-sm">SolarTrack Policy AI</h3>
+            <span class="flex items-center gap-1 text-[11px] text-emerald-700 font-medium">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Online • PM-Surya Ghar Expert
+            </span>
+          </div>
+        </div>
+        <button onclick="closeModal('aiModal')" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 font-bold text-xs">
+          ✕
+        </button>
+      </div>
+
+      <!-- Chat Stream -->
+      <div id="aiChatStream" class="flex-1 overflow-y-auto py-3 space-y-2.5 text-xs">
+        <div class="flex gap-2 items-start">
+          <div class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+            AI
+          </div>
+          <div class="bg-slate-100 rounded-2xl rounded-tl-sm p-3 text-slate-800 max-w-[85%] leading-relaxed">
+            Namaste! I am your SolarTrack policy assistant. Ask me anything about rooftop solar subsidies, NPCI bank delays, net-metering rules, or state top-ups!
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Suggestion Chips -->
+      <div class="py-2 flex gap-1.5 overflow-x-auto text-[11px] no-scrollbar">
+        <button onclick="sendQuick('Why is my subsidy delayed?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 font-medium border border-slate-200">
+          Why is my subsidy delayed?
+        </button>
+        <button onclick="sendQuick('3kW subsidy in Maharashtra?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 font-medium border border-slate-200">
+          3kW subsidy in MH?
+        </button>
+        <button onclick="sendQuick('What is NPCI Aadhaar seeding?')" class="whitespace-nowrap px-2.5 py-1 rounded-full bg-slate-100 hover:bg-emerald-50 hover:text-emerald-700 text-slate-600 font-medium border border-slate-200">
+          What is NPCI seeding?
+        </button>
+      </div>
+
+      <!-- Input Bar -->
+      <div class="pt-2 border-t border-slate-100 flex gap-2">
+        <input id="aiInput" onkeydown="if(event.key==='Enter') sendAiMessage()" type="text" placeholder="Type your solar subsidy question..." class="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500">
+        <button onclick="sendAiMessage()" class="px-3.5 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-bold transition-colors">
+          Send
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= JAVASCRIPT LOGIC ================= -->
+  <script>
+    // State dictionary
+    const statePolicies = {
+      'MH': {
+        name: 'Maharashtra',
+        discom: 'MSEDCL, Adani Electricity, Tata Power, BEST',
+        scheme: 'PM-Surya Ghar + MahaRooftop Subsidy',
+        version: 'V2.4 (Sep 2026)',
+        netMeter: 'Mandatory Smart Bi-directional (15-day SLA)',
+        stateBonus: 0
+      },
+      'GJ': {
+        name: 'Gujarat',
+        discom: 'UGVCL, DGVCL, MGVCL, PGVCL, Torrent',
+        scheme: 'Surya Gujarat + PM-Surya Ghar Slabs',
+        version: 'V2.3 (Aug 2026)',
+        netMeter: 'Gross / Net Metering with ₹2.25/unit feed-in',
+        stateBonus: 10000
+      },
+      'DL': {
+        name: 'Delhi',
+        discom: 'BSES Rajdhani, BSES Yamuna, TPDDL',
+        scheme: 'Delhi Solar Policy (Generation-Based Incentive ₹2-3/kWh)',
+        version: 'V2.5 (2026)',
+        netMeter: 'Virtual Net Metering allowed for societies',
+        stateBonus: 5000
+      },
+      'KA': {
+        name: 'Karnataka',
+        discom: 'BESCOM, MESCOM, CHESCOM, GESCOM, HESCOM',
+        scheme: 'Soura Belaku + Central PM-Surya Ghar',
+        version: 'V2.1 (2026)',
+        netMeter: 'KERC standardized net-metering',
+        stateBonus: 0
+      },
+      'UP': {
+        name: 'Uttar Pradesh',
+        discom: 'UPPCL (MVVNL, PVVNL, DVVNL, PuVVNL), KESCO',
+        scheme: 'UP Solar Rooftop Mission (State Top-up ₹15,000/kW)',
+        version: 'V2.2 (2026)',
+        netMeter: 'Mandatory net meter within 21 days',
+        stateBonus: 15000
+      },
+      'TN': {
+        name: 'Tamil Nadu',
+        discom: 'TANGEDCO',
+        scheme: 'PM-Surya Ghar + TNERC Consumer Solar Tariff',
+        version: 'V2.0 (2026)',
+        netMeter: 'Net feed-in tariff model',
+        stateBonus: 0
+      }
+    };
+
+    // Translations Dictionary
+    const translations = {
+      English: {
+        heroBadge: "Solar Subsidy Policy Tracker",
+        heroTitle: "Find out which solar subsidy rules apply to you.",
+        heroSub: "Enter your state and application date to get the latest subsidy details, policy version and more — all in one place.",
+        checkSubsidyBtn: "Check My Subsidy",
+        checkRulesBtn: "Check Rules by Date",
+        viewLatestSchemeBtn: "View Latest Scheme",
+        cleanEnergyBanner: "Clean Energy Brighter Future",
+        latestUpdatesTitle: "Latest Policy Updates",
+        newUpdateTitle: "New rooftop-solar subsidy detected for Maharashtra.",
+        publishedOn: "Published on: 18 Sep 2026",
+        effectiveFrom: "Effective from: 15 Apr 2026",
+        viewWhatChanged: "View What Changed"
+      },
+      'हिंदी': {
+        heroBadge: "सोलर सब्सिडी पॉलिसी ट्रैकर",
+        heroTitle: "जानें कि आपके लिए कौन से सोलर सब्सिडी नियम लागू होते हैं।",
+        heroSub: "सब्सिडी विवरण, नीति संस्करण और अधिक जानकारी एक ही स्थान पर प्राप्त करने के लिए अपना राज्य और आवेदन तिथि दर्ज करें।",
+        checkSubsidyBtn: "मेरी सब्सिडी जांचें",
+        checkRulesBtn: "तारीख के अनुसार नियम देखें",
+        viewLatestSchemeBtn: "नवीनतम योजना देखें",
+        cleanEnergyBanner: "स्वच्छ ऊर्जा, उज्ज्वल भविष्य",
+        latestUpdatesTitle: "नवीनतम नीति अपडेट",
+        newUpdateTitle: "महाराष्ट्र के लिए नई रूफटॉप-सोलर सब्सिडी अधिसूचित।",
+        publishedOn: "प्रकाशित: 18 सितंबर 2026",
+        effectiveFrom: "प्रभावी: 15 अप्रैल 2026",
+        viewWhatChanged: "क्या बदला देखें"
+      }
+    };
+
+    // ================= SUBSIDY CALCULATOR =================
+    const practicalSolarSizes = [1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50];
+    const calculatorAssumptions = {
+      efficiency: 0.80,
+      areaPerKw: 100,
+      costPerKw: 55000,
+      lifetimeYears: 25,
+      co2Factor: 0.7
+    };
+
+    const defaultAppliances = [
+      ['LED Lights', 10, 6, 5],
+      ['Ceiling Fan', 70, 3, 8],
+      ['Refrigerator', 200, 1, 10],
+      ['TV', 120, 1, 4]
+    ];
+
+    function addApplianceRow(name = '', wattage = 100, quantity = 1, hours = 4) {
+      const row = document.createElement('div');
+      row.className = 'grid grid-cols-12 gap-2 items-center appliance-row';
+      row.innerHTML = `
+        <input type="text" value="${name}" placeholder="e.g. Fan" class="appliance-name col-span-4 bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs font-medium" oninput="runCalc()">
+        <input type="number" min="0" step="1" value="${wattage}" class="appliance-wattage col-span-2 bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs" oninput="runCalc()">
+        <input type="number" min="1" step="1" value="${quantity}" class="appliance-qty col-span-2 bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs" oninput="runCalc()">
+        <input type="number" min="0" max="24" step="0.5" value="${hours}" class="appliance-hours col-span-2 bg-slate-50 border border-slate-200 rounded-lg px-2 py-2 text-xs" oninput="runCalc()">
+        <div class="col-span-2 flex items-center gap-1"><span class="appliance-monthly text-[11px] font-bold text-slate-700">0 kWh</span><button type="button" onclick="this.closest('.appliance-row').remove(); runCalc()" class="text-red-500 hover:bg-red-50 rounded px-1.5 py-1" title="Remove">×</button></div>`;
+      document.getElementById('applianceRows').appendChild(row);
+      runCalc();
+    }
+
+    function formatINR(value) {
+      return '₹' + Math.round(Math.max(0, value)).toLocaleString('en-IN');
+    }
+
+    function getMonthlyApplianceConsumption() {
+      let total = 0;
+      document.querySelectorAll('.appliance-row').forEach(row => {
+        const wattage = Math.max(0, parseFloat(row.querySelector('.appliance-wattage').value) || 0);
+        const quantity = Math.max(0, parseFloat(row.querySelector('.appliance-qty').value) || 0);
+        const hours = Math.min(24, Math.max(0, parseFloat(row.querySelector('.appliance-hours').value) || 0));
+        const monthly = (wattage * quantity * hours / 1000) * 30;
+        row.querySelector('.appliance-monthly').innerText = monthly.toFixed(1) + ' kWh';
+        total += monthly;
+      });
+      return total;
+    }
+
+    function getPSH(stateCode) {
+      const pshByState = { MH: 5.0, GJ: 5.5, DL: 4.8, KA: 5.2, UP: 4.8, TN: 5.3 };
+      return pshByState[stateCode] || 5.0;
+    }
+
+    function getPracticalCapacity(requiredKw) {
+      for (const size of practicalSolarSizes) if (requiredKw <= size) return size;
+      return Math.ceil(requiredKw / 5) * 5;
+    }
+
+    function runCalc() {
+      const stateCode = document.getElementById('calcState').value;
+      const state = statePolicies[stateCode] || statePolicies['MH'];
+      const tariff = Math.max(0, parseFloat(document.getElementById('electricityTariff').value) || 0);
+      const enteredConsumption = Math.max(0, parseFloat(document.getElementById('monthlyConsumption').value) || 0);
+      const enteredBill = Math.max(0, parseFloat(document.getElementById('monthlyBill').value) || 0);
+      const applianceConsumption = getMonthlyApplianceConsumption();
+
+      const monthlyConsumption = enteredConsumption > 0 ? enteredConsumption : applianceConsumption;
+      const calculatedBill = monthlyConsumption * tariff;
+      const currentBill = calculatedBill > 0 ? calculatedBill : enteredBill;
+      const effectiveTariff = tariff > 0 ? tariff : (monthlyConsumption > 0 && enteredBill > 0 ? enteredBill / monthlyConsumption : 0);
+      const dailyConsumption = monthlyConsumption / 30;
+      const psh = getPSH(stateCode);
+      const requiredKwRaw = dailyConsumption / (psh * calculatorAssumptions.efficiency || 1);
+      const solarCapacity = Math.max(1, getPracticalCapacity(requiredKwRaw));
+
+      const dailyGeneration = solarCapacity * psh * calculatorAssumptions.efficiency;
+      const monthlyGeneration = dailyGeneration * 30;
+      const annualGeneration = monthlyGeneration * 12;
+      const solarCoverage = monthlyConsumption > 0 ? Math.min(monthlyGeneration / monthlyConsumption, 1) : 0;
+      const monthlySavings = Math.min(currentBill, monthlyConsumption * solarCoverage * effectiveTariff);
+      const remainingBill = Math.max(0, currentBill - monthlySavings);
+      const roofArea = solarCapacity * calculatorAssumptions.areaPerKw;
+      const systemCost = solarCapacity * calculatorAssumptions.costPerKw;
+
+      let centralSubsidy = 0;
+      if (solarCapacity === 1) centralSubsidy = 30000;
+      else if (solarCapacity === 2) centralSubsidy = 60000;
+      else centralSubsidy = 78000;
+      const stateSubsidy = Math.min(state.stateBonus, solarCapacity * 5000);
+      const totalSubsidy = centralSubsidy + stateSubsidy;
+      const netSystemCost = Math.max(0, systemCost - totalSubsidy);
+
+      const annualSavings = monthlySavings * 12;
+      const payback = annualSavings > 0 ? netSystemCost / annualSavings : null;
+      const lifetimeNetSavings = (annualSavings * calculatorAssumptions.lifetimeYears) - netSystemCost;
+      const roi = netSystemCost > 0 ? (lifetimeNetSavings / netSystemCost) * 100 : 0;
+      const co2Tonnes = (annualGeneration * calculatorAssumptions.co2Factor) / 1000;
+
+      document.getElementById('applianceTotal').innerText = applianceConsumption.toFixed(1) + ' kWh';
+      document.getElementById('resPSH').innerText = psh.toFixed(1) + ' hrs/day';
+      document.getElementById('resDailyConsumption').innerText = dailyConsumption.toFixed(1) + ' kWh';
+      document.getElementById('resRequiredCapacity').innerText = solarCapacity + ' kW';
+      document.getElementById('resDailyGeneration').innerText = dailyGeneration.toFixed(1) + ' kWh';
+      document.getElementById('resMonthlyGeneration').innerText = monthlyGeneration.toFixed(0) + ' kWh';
+      document.getElementById('resAnnualGeneration').innerText = annualGeneration.toFixed(0) + ' kWh';
+      document.getElementById('resSolarCoverage').innerText = (solarCoverage * 100).toFixed(1) + '%';
+      document.getElementById('resMonthlySavings').innerText = formatINR(monthlySavings);
+      document.getElementById('resRemainingBill').innerText = formatINR(remainingBill);
+      document.getElementById('resRoofArea').innerText = roofArea.toLocaleString('en-IN') + ' sq ft';
+      document.getElementById('resTotalCost').innerText = formatINR(systemCost);
+      document.getElementById('resSubsidy').innerText = formatINR(totalSubsidy);
+      document.getElementById('resSubsidyBreakdown').innerText = `Central: ${formatINR(centralSubsidy)} + State: ${formatINR(stateSubsidy)}`;
+      document.getElementById('resNetCost').innerText = formatINR(netSystemCost);
+      document.getElementById('resAnnualSavings').innerText = formatINR(annualSavings);
+      document.getElementById('resPayback').innerText = payback === null ? '—' : payback.toFixed(2) + ' years';
+      document.getElementById('resLifetimeSavings').innerText = formatINR(lifetimeNetSavings);
+      document.getElementById('resROI').innerText = roi.toFixed(1) + '%';
+      document.getElementById('resCO2').innerText = co2Tonnes.toFixed(2) + ' t/year';
+    }
+
+    function initCalculator() {
+      if (!document.querySelector('.appliance-row')) defaultAppliances.forEach(a => addApplianceRow(...a));
+      runCalc();
+    }
+
+    function updateStateDetails() {
+      const code = document.getElementById('stateSearchSelect').value;
+      const data = statePolicies[code];
+      if (data) {
+        document.getElementById('stDiscom').innerText = data.discom;
+        document.getElementById('stScheme').innerText = data.scheme;
+        document.getElementById('stVersion').innerText = data.version;
+        document.getElementById('stNetMeter').innerText = data.netMeter;
+      }
+    }
+
+    let currentLangIdx = 0;
+    const langList = ['English', 'हिंदी'];
+    function toggleLang() {
+      currentLangIdx = (currentLangIdx + 1) % langList.length;
+      const nextLang = langList[currentLangIdx];
+      const mobileLabel = document.getElementById('mobileLangLabel');
+      if (mobileLabel) mobileLabel.innerText = nextLang === 'English' ? 'EN' : 'HI';
+      setLang(nextLang);
+    }
+
+    document.addEventListener('DOMContentLoaded', initCalculator);
+
+    // Navigation scroll
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Dropdown & Modal triggers
+    function toggleNotif() {
+      document.getElementById('notifPopover').classList.toggle('hidden');
+    }
+
+    function toggleLangMenu() {
+      document.getElementById('langDropdown').classList.toggle('hidden');
+    }
+
+    function setLang(lang) {
+      document.getElementById('langLabel').innerText = lang;
+      document.getElementById('langDropdown').classList.add('hidden');
+      
+      const t = translations[lang] || translations.English;
+      document.getElementById('t-heroBadge').innerText = t.heroBadge;
+      document.getElementById('t-heroTitle').innerText = t.heroTitle;
+      document.getElementById('t-heroSub').innerText = t.heroSub;
+      document.getElementById('t-checkSubsidyBtn').innerText = t.checkSubsidyBtn;
+      document.getElementById('t-checkRulesBtn').innerText = t.checkRulesBtn;
+      document.getElementById('t-viewLatestSchemeBtn').innerText = t.viewLatestSchemeBtn;
+      document.getElementById('t-cleanEnergyBanner').innerText = t.cleanEnergyBanner;
+      document.getElementById('t-latestUpdatesTitle').innerText = t.latestUpdatesTitle;
+      document.getElementById('t-newUpdateTitle').innerText = t.newUpdateTitle;
+      document.getElementById('t-publishedOn').innerText = t.publishedOn;
+      document.getElementById('t-effectiveFrom').innerText = t.effectiveFrom;
+      document.getElementById('t-viewWhatChanged').innerText = t.viewWhatChanged;
+    }
+
+    function openModal(id) {
+      document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    // Grievance tab switching
+    function switchGrievanceTab(tab) {
+      ['tabBtn1', 'tabBtn2', 'tabBtn3'].forEach(b => {
+        document.getElementById(b).className = 'pb-3 border-b-2 border-transparent text-slate-500 hover:text-slate-800 flex items-center gap-2';
+      });
+      ['grievanceTab1', 'grievanceTab2', 'grievanceTab3'].forEach(t => {
+        document.getElementById(t).classList.add('hidden');
+      });
+
+      if (tab === 'diagnose') {
+        document.getElementById('tabBtn1').className = 'pb-3 border-b-2 border-emerald-600 text-emerald-700 font-bold flex items-center gap-2';
+        document.getElementById('grievanceTab1').classList.remove('hidden');
+      } else if (tab === 'claim') {
+        document.getElementById('tabBtn2').className = 'pb-3 border-b-2 border-emerald-600 text-emerald-700 font-bold flex items-center gap-2';
+        document.getElementById('grievanceTab2').classList.remove('hidden');
+      } else if (tab === 'track') {
+        document.getElementById('tabBtn3').className = 'pb-3 border-b-2 border-emerald-600 text-emerald-700 font-bold flex items-center gap-2';
+        document.getElementById('grievanceTab3').classList.remove('hidden');
+      }
+    }
+
+    function selectIssue(type) {
+      switchGrievanceTab('claim');
+      if (type === 'npci') {
+        alert('Diagnosed: NPCI Aadhaar Mapping. Please provide your bank details in the claim form to submit a direct APBS map re-trigger request to your bank!');
+      } else if (type === 'pcr') {
+        alert('Diagnosed: Vendor PCR pending. Submitting this claim will send an automated reminder and SLA breach warning to your registered solar vendor.');
+      } else {
+        alert('Diagnosed: DISCOM SLA breach. Submitting this claim logs an official grievance on the State Electricity Regulatory Commission portal.');
+      }
+    }
+
+    function submitClaim(e) {
+      e.preventDefault();
+      const randomTicket = 'ST-MNRE-' + Math.floor(100000 + Math.random() * 900000);
+      alert(`Claim submitted successfully!\n\nTicket Number: ${randomTicket}\nStatus: Escalated to State DISCOM Nodal Officer\nSMS confirmation has been dispatched.`);
+      document.getElementById('trackInput').value = randomTicket;
+      document.getElementById('trTicket').innerText = 'Ticket: ' + randomTicket;
+      switchGrievanceTab('track');
+      document.getElementById('trackResultBox').classList.remove('hidden');
+    }
+
+    function runTrack() {
+      const q = document.getElementById('trackInput').value.trim();
+      if (!q) {
+        alert('Please enter a ticket or consumer number.');
+        return;
+      }
+      document.getElementById('trTicket').innerText = 'Ticket: ' + (q.startsWith('ST-') ? q : 'ST-MNRE-' + q.slice(-5));
+      document.getElementById('trackResultBox').classList.remove('hidden');
+    }
+
+    // AI Chat Assistant
+    function sendQuick(q) {
+      document.getElementById('aiInput').value = q;
+      sendAiMessage();
+    }
+
+    function sendAiMessage() {
+      const input = document.getElementById('aiInput');
+      const val = input.value.trim();
+      if (!val) return;
+
+      const chat = document.getElementById('aiChatStream');
+
+      // User Message
+      const userBubble = document.createElement('div');
+      userBubble.className = 'flex justify-end gap-2 items-start';
+      userBubble.innerHTML = `
+        <div class="bg-emerald-700 text-white rounded-2xl rounded-tr-sm p-3 max-w-[85%] leading-relaxed">
+          ${val}
+        </div>
+      `;
+      chat.appendChild(userBubble);
+      input.value = '';
+      chat.scrollTop = chat.scrollHeight;
+
+      // Smart AI reply
+      setTimeout(() => {
+        let reply = "";
+        const lower = val.toLowerCase();
+        if (lower.includes('delay') || lower.includes('not received') || lower.includes('pending')) {
+          reply = "The #1 reason for solar subsidy delays (68% of cases) is that your bank account is not mapped on the NPCI Aadhaar mapper for DBT. You can solve this by submitting an 'Aadhaar Seeding Mandate' at your bank branch or using our Grievance Portal to escalate!";
+        } else if (lower.includes('3kw') || lower.includes('3 kw') || lower.includes('maharashtra')) {
+          reply = "Under PM-Surya Ghar in Maharashtra, a 3kW system receives a flat ₹78,000 Central subsidy. Total cost is ~₹1,95,000, bringing your net cost to ~₹1,17,000. MSEDCL provides smart net-metering within 15 days.";
+        } else if (lower.includes('npci') || lower.includes('aadhaar')) {
+          reply = "Government solar subsidies cannot be sent via regular NEFT/IMPS. They are credited through the NPCI Aadhaar Payment Bridge. Ensure your Aadhaar is linked AND seeded for DBT in your primary bank account.";
+        } else {
+          reply = `Under the 2026 PM-Surya Ghar policy, residential households receive ₹30,000 for 1kW, ₹60,000 for 2kW, and ₹78,000 for 3kW or higher. Net metering is approved within 15 days by DISCOM.`;
+        }
+
+        const aiBubble = document.createElement('div');
+        aiBubble.className = 'flex gap-2 items-start';
+        aiBubble.innerHTML = `
+          <div class="w-6 h-6 rounded-full bg-emerald-700 text-white flex items-center justify-center text-[10px] shrink-0 mt-0.5">
+            AI
+          </div>
+          <div class="bg-slate-100 rounded-2xl rounded-tl-sm p-3 text-slate-800 max-w-[85%] leading-relaxed">
+            ${reply}
+          </div>
+        `;
+        chat.appendChild(aiBubble);
+        chat.scrollTop = chat.scrollHeight;
+      }, 500);
+    }
+
+    // Initialize
+    updateStateDetails();
+  </script>
+
+</body>
+</html>

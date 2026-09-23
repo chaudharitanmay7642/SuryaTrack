@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "title": "SuryaTrack Solar Policy & Subsidy Resolution Database",
+    "policyVersion": "2.4",
+    "lastUpdated": "18 Sep 2026",
+    "nationalScheme": "PM-Surya Ghar: Muft Bijli Yojana",
+    "centralMaxSubsidy": 78000,
+    "benchmarkCostPerKw": 65000
+  },
+  "states": [
+    {
+      "id": "MH",
+      "name": "Maharashtra",
+      "discom": "MSEDCL, Adani Electricity, Tata Power, BEST",
+      "scheme": "PM-Surya Ghar + MahaRooftop Subsidy",
+      "version": "V2.4 (Sep 2026)",
+      "effectiveDate": "15 Apr 2026",
+      "stateSubsidyBonus": 0,
+      "solarRatePerKw": 65000,
+      "netMeteringRule": "Mandatory Smart Bi-directional (15-day SLA)",
+      "portalUrl": "https://www.mahadiscom.in",
+      "helpline": "1912 / 1800-233-3435",
+      "slaDays": 15
+    },
+    {
+      "id": "GJ",
+      "name": "Gujarat",
+      "discom": "DGVCL, MGVCL, PGVCL, UGVCL, Torrent Power",
+      "scheme": "Surya Gujarat + PM-Surya Ghar",
+      "version": "V2.1 (May 2026)",
+      "effectiveDate": "01 May 2026",
+      "stateSubsidyBonus": 8000,
+      "solarRatePerKw": 62000,
+      "netMeteringRule": "Smart Bi-directional Net-Meter (10-day SLA)",
+      "portalUrl": "https://suryagujarat.guvnl.in",
+      "helpline": "1800-233-155333",
+      "slaDays": 10
+    },
+    {
+      "id": "DL",
+      "name": "Delhi",
+      "discom": "BSES Rajdhani, BSES Yamuna, TPDDL",
+      "scheme": "Delhi Solar Policy 2024-26 (GBI @ ₹3/unit)",
+      "version": "V3.0 (Feb 2026)",
+      "effectiveDate": "01 Feb 2026",
+      "stateSubsidyBonus": 10000,
+      "solarRatePerKw": 66000,
+      "netMeteringRule": "Virtual & Group Net Metering Supported (15-day SLA)",
+      "portalUrl": "https://solar.delhi.gov.in",
+      "helpline": "19122 / 19123",
+      "slaDays": 15
+    },
+    {
+      "id": "KA",
+      "name": "Karnataka",
+      "discom": "BESCOM, HESCOM, MESCOM, GESCOM, CESC",
+      "scheme": "PM-Surya Ghar + Soura Belaku",
+      "version": "V1.9 (Mar 2026)",
+      "effectiveDate": "10 Mar 2026",
+      "stateSubsidyBonus": 4000,
+      "solarRatePerKw": 64000,
+      "netMeteringRule": "Gross & Net Metering with Smart Bi-directional Meter (15-day SLA)",
+      "portalUrl": "https://bescom.karnataka.gov.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "TN",
+      "name": "Tamil Nadu",
+      "discom": "TANGEDCO",
+      "scheme": "PM-Surya Ghar + TEDA Rooftop Solar",
+      "version": "V2.0 (Apr 2026)",
+      "effectiveDate": "20 Apr 2026",
+      "stateSubsidyBonus": 5000,
+      "solarRatePerKw": 63000,
+      "netMeteringRule": "Bi-directional Net Feed-in (15-day SLA)",
+      "portalUrl": "https://www.tangedco.gov.in",
+      "helpline": "94987 94987",
+      "slaDays": 15
+    },
+    {
+      "id": "UP",
+      "name": "Uttar Pradesh",
+      "discom": "UPPCL, MVVNL, PVVNL, DVVNL, PuVVNL",
+      "scheme": "PM-Surya Ghar + UP Solar Policy (State Top-up ₹15,000)",
+      "version": "V2.2 (Jun 2026)",
+      "effectiveDate": "05 Jun 2026",
+      "stateSubsidyBonus": 15000,
+      "solarRatePerKw": 64000,
+      "netMeteringRule": "Mandatory Bi-directional Smart Meter (20-day SLA)",
+      "portalUrl": "https://upnedasolarrooftop.in",
+      "helpline": "1912 / 0522-2720652",
+      "slaDays": 20
+    },
+    {
+      "id": "RJ",
+      "name": "Rajasthan",
+      "discom": "JVVNL, AVVNL, JdVVNL",
+      "scheme": "PM-Surya Ghar + Rajasthan Solar Energy Policy",
+      "version": "V1.8 (Jan 2026)",
+      "effectiveDate": "15 Jan 2026",
+      "stateSubsidyBonus": 6000,
+      "solarRatePerKw": 61000,
+      "netMeteringRule": "Net-Metering with Time-of-Day (ToD) Tariff (15-day SLA)",
+      "portalUrl": "https://energy.rajasthan.gov.in",
+      "helpline": "1800-180-6045",
+      "slaDays": 15
+    },
+    {
+      "id": "KL",
+      "name": "Kerala",
+      "discom": "KSEBL",
+      "scheme": "PM-Surya Ghar + Soura Scheme",
+      "version": "V2.0 (Mar 2026)",
+      "effectiveDate": "10 Mar 2026",
+      "stateSubsidyBonus": 4500,
+      "solarRatePerKw": 64000,
+      "netMeteringRule": "Smart Net-Metering with Banking facility (15-day SLA)",
+      "portalUrl": "https://kseb.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "MP",
+      "name": "Madhya Pradesh",
+      "discom": "MPMKVVCL, MPPKVVCL, MPPoKVVCL",
+      "scheme": "PM-Surya Ghar + MP Rooftop Solar",
+      "version": "V1.9 (Apr 2026)",
+      "effectiveDate": "01 Apr 2026",
+      "stateSubsidyBonus": 5000,
+      "solarRatePerKw": 62000,
+      "netMeteringRule": "Mandatory Smart Meter Synchronization (15-day SLA)",
+      "portalUrl": "https://mpenergy.nic.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "WB",
+      "name": "West Bengal",
+      "discom": "WBSEDCL, CESC",
+      "scheme": "PM-Surya Ghar + WB Solar Guidelines",
+      "version": "V1.8 (Feb 2026)",
+      "effectiveDate": "15 Feb 2026",
+      "stateSubsidyBonus": 4000,
+      "solarRatePerKw": 65000,
+      "netMeteringRule": "Gross & Net Metering Facility (20-day SLA)",
+      "portalUrl": "https://wbsedcl.in",
+      "helpline": "19121",
+      "slaDays": 20
+    },
+    {
+      "id": "TG",
+      "name": "Telangana",
+      "discom": "TSSPDCL, TSNPDCL",
+      "scheme": "PM-Surya Ghar + TG Solar Net-Metering",
+      "version": "V2.0 (Mar 2026)",
+      "effectiveDate": "01 Mar 2026",
+      "stateSubsidyBonus": 5000,
+      "solarRatePerKw": 63000,
+      "netMeteringRule": "Bi-directional Net Metering (15-day SLA)",
+      "portalUrl": "https://tssouthernpower.com",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "HR",
+      "name": "Haryana",
+      "discom": "UHBVN, DHBVN",
+      "scheme": "PM-Surya Ghar + Haryana Solar Rooftop Subsidy",
+      "version": "V2.1 (May 2026)",
+      "effectiveDate": "01 May 2026",
+      "stateSubsidyBonus": 6000,
+      "solarRatePerKw": 63000,
+      "netMeteringRule": "Smart Bi-directional Net-Meter (15-day SLA)",
+      "portalUrl": "https://hareda.gov.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "PB",
+      "name": "Punjab",
+      "discom": "PSPCL",
+      "scheme": "PM-Surya Ghar + Punjab Rooftop Solar Scheme",
+      "version": "V1.9 (Apr 2026)",
+      "effectiveDate": "10 Apr 2026",
+      "stateSubsidyBonus": 5000,
+      "solarRatePerKw": 64000,
+      "netMeteringRule": "Mandatory Net Metering (15-day SLA)",
+      "portalUrl": "https://pspcl.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "AP",
+      "name": "Andhra Pradesh",
+      "discom": "APEPDCL, APSPDCL, APCPDCL",
+      "scheme": "PM-Surya Ghar + AP Solar Net Metering",
+      "version": "V2.0 (Mar 2026)",
+      "effectiveDate": "01 Mar 2026",
+      "stateSubsidyBonus": 5000,
+      "solarRatePerKw": 63000,
+      "netMeteringRule": "Smart Bi-directional Metering (15-day SLA)",
+      "portalUrl": "https://nredcap.gov.in",
+      "helpline": "1912",
+      "slaDays": 15
+    },
+    {
+      "id": "OD",
+      "name": "Odisha",
+      "discom": "TPCODL, TPWODL, TPSODL, TPNODL",
+      "scheme": "PM-Surya Ghar + OREDA Rooftop Solar",
+      "version": "V1.9 (Apr 2026)",
+      "effectiveDate": "15 Apr 2026",
+      "stateSubsidyBonus": 4000,
+      "solarRatePerKw": 63000,
+      "netMeteringRule": "Net Metering with Bi-directional Meter (15-day SLA)",
+      "portalUrl": "https://oredaorissa.com",
+      "helpline": "1912",
+      "slaDays": 15
+    }
+  ],
+  "policyUpdates": [
+    {
+      "id": "upd-001",
+      "title": "New rooftop-solar subsidy detected for Maharashtra.",
+      "state": "Maharashtra",
+      "badge": "NEW",
+      "publishedOn": "18 Sep 2026",
+      "effectiveFrom": "15 Apr 2026",
+      "summary": "MERC issues notification revising DISCOM net-meter commissioning SLA to 15 days with mandatory smart bi-directional meters and accelerated Direct Benefit Transfer (DBT) disbursal.",
+      "changes": [
+        "Net-meter synchronization SLA capped strictly at 15 days",
+        "Mandatory Aadhaar NPCI bank account verification before work order release",
+        "Direct escalation channel for unresolved consumer grievances beyond 15 days"
+      ]
+    },
+    {
+      "id": "upd-002",
+      "title": "Gujarat simplifies vendor PCR submission window.",
+      "state": "Gujarat",
+      "badge": "UPDATE",
+      "publishedOn": "12 Sep 2026",
+      "effectiveFrom": "01 Oct 2026",
+      "summary": "Vendors must submit geotagged Project Commissioning Report (PCR) within 7 days of installation, reducing disbursal latency to under 20 days.",
+      "changes": [
+        "7-day vendor PCR upload deadline",
+        "Automatic SMS alert to consumer upon vendor report submission"
+      ]
+    },
+    {
+      "id": "upd-003",
+      "title": "Delhi Solar Policy 2026 expands Generation Based Incentive (GBI).",
+      "state": "Delhi",
+      "badge": "NEW",
+      "publishedOn": "05 Sep 2026",
+      "effectiveFrom": "01 Oct 2026",
+      "summary": "Residential consumers can receive ₹3/unit GBI on solar power generated, credited directly on bi-monthly power bills in addition to central DBT subsidy.",
+      "changes": [
+        "₹3/unit GBI for 5 years",
+        "Group net-metering enabled for apartment welfare associations"
+      ]
+    }
+  ],
+  "policyVersions": [
+    {
+      "version": "V1",
+      "label": "Version 1",
+      "date": "Jan 2026",
+      "subsidy": "₹78,000",
+      "capacity": "5 kW",
+      "color": "#0284c7",
+      "bg": "#e0f2fe",
+      "status": "Historical",
+      "keyChanges": "Legacy baseline subsidy structure with flat CAPEX subsidy for systems up to 5 kW."
+    },
+    {
+      "version": "V2",
+      "label": "Version 2",
+      "date": "Apr 2026",
+      "subsidy": "₹78,000",
+      "capacity": "3 kW",
+      "color": "#16a34a",
+      "bg": "#dcfce7",
+      "status": "Active Policy",
+      "keyChanges": "Standardized nationwide under PM-Surya Ghar. Max ₹78,000 capped at 3 kW. Mandatory Aadhaar NPCI seeding for DBT."
+    },
+    {
+      "version": "V3",
+      "label": "Version 3",
+      "date": "Aug 2026",
+      "subsidy": "₹78,000",
+      "capacity": "3 kW",
+      "color": "#9333ea",
+      "bg": "#f3e8ff",
+      "status": "Upcoming Policy",
+      "keyChanges": "Smart-meter mandate introduced, Time-of-Day (ToD) net feed-in tariffs, and fast-track 15-day DBT disbursal."
+    },
+    {
+      "version": "V2.4",
+      "label": "Version 2.4",
+      "date": "Sep 2026",
+      "subsidy": "₹78,000",
+      "capacity": "3 kW",
+      "color": "#ea580c",
+      "bg": "#ffedd5",
+      "status": "Current Revision",
+      "keyChanges": "Streamlined grievance redressal, DISCOM 15-day net-meter SLA, and automated DBT escalation."
+    }
+  ],
+  "rejectionReasons": [
+    {
+      "id": "npci",
+      "title": "NPCI Aadhaar Not Mapped",
+      "severity": "Critical (Responsible for 68% of DBT solar subsidy delays)",
+      "badge": "Most Common",
+      "badgeColor": "#dc2626",
+      "description": "The central government disburses solar subsidies exclusively via Aadhaar-enabled Direct Benefit Transfer (DBT). Bank account is not mapped to Aadhaar payment bridge (APBS). Even if bank KYC is done, NPCI mapping may be absent.",
+      "solution": "Visit your bank branch and submit the 'NPCI Aadhaar Seeding / Mandate Form', or enable DBT mapping via your bank's mobile banking app under 'Services > Manage DBT / Aadhaar Seeding'.",
+      "actionLabel": "View Fix & Resolution",
+      "checkAction": "Verify Aadhaar-seeding status via UIDAI or bank netbanking."
+    },
+    {
+      "id": "pcr",
+      "title": "Vendor PCR Not Uploaded",
+      "severity": "High (Affects 19% of claims)",
+      "badge": "Vendor Delay",
+      "badgeColor": "#f59e0b",
+      "description": "Project Commissioning Report (PCR) must be signed and submitted on the National Portal by the registered vendor along with geotagged site photographs and equipment serial numbers.",
+      "solution": "Contact your solar installer/vendor with your National Portal Application ID. Issue an official reminder notice requesting immediate PCR completion.",
+      "actionLabel": "Vendor Reminder Notice",
+      "checkAction": "Track vendor submission status in the National Portal."
+    },
+    {
+      "id": "netmeter",
+      "title": "DISCOM Meter Inspection Pending",
+      "severity": "Medium (Affects 9% of claims)",
+      "badge": "DISCOM Inspection",
+      "badgeColor": "#2563eb",
+      "description": "DISCOM SLA requires net-meter synchronization within 15 days of installation. Beyond this, escalation applies. The junior engineer must verify synchronization on the national portal.",
+      "solution": "Lodge an SLA escalation with your local DISCOM sub-division junior engineer citing your Work Order / Application ID.",
+      "actionLabel": "Lodge SLA Escalation",
+      "checkAction": "Track DISCOM net-meter inspection stage."
+    },
+    {
+      "id": "name_mismatch",
+      "title": "Name Mismatch (Electricity Bill vs Bank Account)",
+      "severity": "High",
+      "badge": "Data Discrepancy",
+      "badgeColor": "#d97706",
+      "description": "Consumer name registered on the electricity connection must match the name on the bank passbook / cancelled cheque.",
+      "solution": "Upload a cancelled cheque and a name declaration affidavit under Discrepancy Resolution on the national portal.",
+      "actionLabel": "Upload Affidavit",
+      "checkAction": "Re-verify bank details on portal."
+    }
+  ]
+}
